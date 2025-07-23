@@ -14,29 +14,23 @@ export const Footer = () => {
                             </p>
                         </div>
                         <div className="flex space-x-6">
-                            <a href="#" className="hover:text-indigo-300 transition"
-                            ><i className="fab fa-facebook-f"></i
-                            ></a>
-                            <a href="#" className="hover:text-indigo-300 transition"
-                            ><i className="fab fa-twitter"></i
-                            ></a>
-                            <a href="#" className="hover:text-indigo-300 transition"
-                            ><i className="fab fa-instagram"></i
-                            ></a>
-                            <a href="#" className="hover:text-indigo-300 transition"
-                            ><i className="fab fa-github"></i
-                            ></a>
+                            <a href="#" className="hover:text-indigo-300 transition">
+                                <i className="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" className="hover:text-indigo-300 transition">
+                                <i className="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" className="hover:text-indigo-300 transition">
+                                <i className="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" className="hover:text-indigo-300 transition">
+                                <i className="fab fa-github"></i>
+                            </a>
                         </div>
-                    </div>
-                    <div
-                        className="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400"
-                    >
-                        <p>
-                            &copy; 2023 BookNest Library Management System. All rights reserved.
-                        </p>
                     </div>
                 </div>
             </footer>
         </>
-    );
+    )
+        ;
 };

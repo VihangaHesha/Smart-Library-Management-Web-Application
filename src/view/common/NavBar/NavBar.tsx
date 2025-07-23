@@ -1,4 +1,5 @@
 import {Link} from "react-router-dom";
+import logo from "../../../assets/BookNest-Library-Logo-v3.png"
 
 export function NavBar(){
     return(
@@ -6,7 +7,10 @@ export function NavBar(){
             className="container bg-indigo-700 text-white shadow-lg mx-auto px-4 py-3 flex justify-between items-center"
         >
             <div className="flex items-center space-x-2">
-                <i className="fas fa-book-open text-2xl"></i>
+                {/*<i className="fas fa-book-open text-2xl"></i>*/}
+                <Link to="/">
+                    <img className="w-9 h-9 rounded-full object-cover" src={logo} alt="BookNest Library Logo"/>
+                </Link>
                 <span className="text-xl font-bold">BookNest</span>
             </div>
              <div className="hidden md:flex space-x-6">

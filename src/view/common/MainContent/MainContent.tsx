@@ -7,7 +7,7 @@ import {Reports} from "../../pages/Reports/Reports.tsx";
 
 export const MainContent = () => {
     return (
-        <div className="flex flex-col w-full overflow-auto p-2.5 h-[78vh]">
+        <div className="flex flex-col w-full overflow-auto p-2.5 h-[calc(100%-168px)]">
             <div>
                 <Routes>
                     <Route path="/" element={<Home/>}></Route>
