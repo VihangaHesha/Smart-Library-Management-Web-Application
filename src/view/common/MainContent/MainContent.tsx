@@ -4,6 +4,8 @@ import {Books} from "../../pages/Books/Books.tsx";
 import {Members} from "../../pages/Members/Members.tsx";
 import {Transactions} from "../../pages/Transactions/Transactions.tsx";
 import {Reports} from "../../pages/Reports/Reports.tsx";
+import {Login} from "../../pages/Login/Login.tsx";
+import {Register} from "../../pages/Register/Register.tsx";
 
 export const MainContent = () => {
     return (
@@ -15,6 +17,8 @@ export const MainContent = () => {
                     <Route path="/members" element={<Members/>}></Route>
                     <Route path="/transactions" element={<Transactions/>}></Route>
                     <Route path="/reports" element={<Reports/>}></Route>
+                    <Route path="/login" element={<Login/>}></Route>
+                    <Route path="/register" element={<Register/>}></Route>
                 </Routes>
             </div>
         </div>

@@ -27,6 +27,15 @@ export function NavBar(){
                  <Link to="/transactions">
                      <p className="hover:text-indigo-200 transition">Transactions</p>
                  </Link>
+                 <Link to="/reports">
+                     <p className="hover:text-indigo-200 transition">Reports</p>
+                 </Link>
+                 <Link to="/login">
+                     <p className="hover:text-indigo-200 transition">Login</p>
+                 </Link>
+                 <Link to="/register">
+                     <p className="hover:text-indigo-200 transition">Register</p>
+                 </Link>
              </div>
 
             <div className="flex items-center space-x-4">
