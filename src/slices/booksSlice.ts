@@ -1,6 +1,5 @@
 import type {BookData} from "../model/BookData.ts"
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import{createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 
 interface BookState {
@@ -18,7 +17,17 @@ export const getAllBooks = createAsyncThunk(
     async () => {
         const response = await fetch("./book.json")
         return await response.json()
+    }
+)
 
+export const overDueBooks = createAsyncThunk(
+    "books/overDueBooks",
+    async () => {
+        const response = await fetch("./book.json");
+        const data: BookData[] = await response.json();
+
+        // Filter only books with status 'Overdue'
+        return data.filter(book => book.status === "Overdue");
     }
 )
 
@@ -28,18 +37,26 @@ const bookSlice = createSlice({
     reducers : {},
     extraReducers: (builder)=> {
         builder
-            .addCase(getAllBooks.pending, () => {
+            .addCase((getAllBooks.pending), () => {
                 alert("Books Are Loading...")
             })
 
             .addCase(getAllBooks.fulfilled, (state, action) => {
             state.list = action.payload
         })
+            .addCase(overDueBooks.fulfilled, (state, action) => {
+                state.list = action.payload
+            })
         .addCase(getAllBooks.rejected, (state, action) => {
             state.error = action.error.message
             alert(`Error : ${state.error}`)
             console.log(state.error)
         })
+            .addCase(overDueBooks.rejected, (state, action) => {
+                state.error = action.error.message
+                alert(`Error : ${state.error}`)
+                console.log(state.error)
+            })
     }
 })
 

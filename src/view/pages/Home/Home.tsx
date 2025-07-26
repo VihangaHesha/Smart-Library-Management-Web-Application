@@ -4,14 +4,16 @@ import type {AppDispatch, RootState} from "../../../store/store.ts";
 import {getAllBooks} from "../../../slices/booksSlice.ts";
 import {Book} from "../../common/Book/Book.tsx";
 import {Link} from "react-router-dom";
+import {OverDue} from "../../common/Book/OverDue.tsx";
 
 export function Home() {
 
     const dispatch = useDispatch<AppDispatch>();
-    const {list} = useSelector((state: RootState) => state.books);
+    const { list } = useSelector((state: RootState) => state.books);
     useEffect(() => {
         dispatch(getAllBooks())
     }, [dispatch]);
+
 
     return (
         <div className="container mx-auto px-4 py-6">
@@ -239,78 +241,7 @@ export function Home() {
                         </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900">
-                                    The Great Gatsby
-                                </div>
-                                <div className="text-sm text-gray-500">F. Scott Fitzgerald</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900">
-                                    John Smith
-                                </div>
-                                <div className="text-sm text-gray-500">john@example.com</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                May 15, 2023
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <span
-                      className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
-                  >7 days</span
-                  >
-                            </td>
-                            <td
-                                className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                            >
-                                $3.50
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button className="text-indigo-600 hover:text-indigo-900 mr-3">
-                                    <i className="fas fa-envelope"></i>
-                                </button>
-                                <button className="text-green-600 hover:text-green-900">
-                                    <i className="fas fa-check"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900">
-                                    To Kill a Mockingbird
-                                </div>
-                                <div className="text-sm text-gray-500">Harper Lee</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-900">
-                                    Sarah Johnson
-                                </div>
-                                <div className="text-sm text-gray-500">sarah@example.com</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                May 18, 2023
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <span
-                      className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
-                  >4 days</span
-                  >
-                            </td>
-                            <td
-                                className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                            >
-                                $2.00
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button className="text-indigo-600 hover:text-indigo-900 mr-3">
-                                    <i className="fas fa-envelope"></i>
-                                </button>
-                                <button className="text-green-600 hover:text-green-900">
-                                    <i className="fas fa-check"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        <OverDue books={list} />
                         </tbody>
                     </table>
                 </div>
