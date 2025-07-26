@@ -1,4 +1,18 @@
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import type {AppDispatch, RootState} from "../../../store/store.ts";
+import {getAllBooks} from "../../../slices/booksSlice.ts";
+import {Book} from "../../common/Book/Book.tsx";
+import {Link} from "react-router-dom";
+
 export function Home() {
+
+    const dispatch = useDispatch<AppDispatch>();
+    const {list} = useSelector((state: RootState) => state.books);
+    useEffect(() => {
+        dispatch(getAllBooks())
+    }, [dispatch]);
+
     return (
         <div className="container mx-auto px-4 py-6">
             {/*Dashboard Header*/}
@@ -121,180 +135,70 @@ export function Home() {
                                 </th>
                             </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="flex items-center">
-                                        <div
-                                            className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center"
-                                        >
-                                            <i className="fas fa-book text-indigo-600"></i>
-                                        </div>
-                                        <div className="ml-4">
-                                            <div className="text-sm font-medium text-gray-900">
-                                                The Silent Patient
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    Alex Michaelides
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    Thriller
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                        className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                    >Available</span
-                    >
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <button className="text-indigo-600 hover:text-indigo-900 mr-3">
-                                        <i className="fas fa-eye"></i>
-                                    </button>
-                                    <button className="text-indigo-600 hover:text-indigo-900 mr-3">
-                                        <i className="fas fa-edit"></i>
-                                    </button>
-                                    <button className="text-red-600 hover:text-red-900">
-                                        <i className="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="flex items-center">
-                                        <div
-                                            className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center"
-                                        >
-                                            <i className="fas fa-book text-indigo-600"></i>
-                                        </div>
-                                        <div className="ml-4">
-                                            <div className="text-sm font-medium text-gray-900">
-                                                Educated
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    Tara Westover
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    Memoir
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                        className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800"
-                    >Checked Out</span
-                    >
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <button className="text-indigo-600 hover:text-indigo-900 mr-3">
-                                        <i className="fas fa-eye"></i>
-                                    </button>
-                                    <button className="text-indigo-600 hover:text-indigo-900 mr-3">
-                                        <i className="fas fa-edit"></i>
-                                    </button>
-                                    <button className="text-red-600 hover:text-red-900">
-                                        <i className="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="flex items-center">
-                                        <div
-                                            className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center"
-                                        >
-                                            <i className="fas fa-book text-indigo-600"></i>
-                                        </div>
-                                        <div className="ml-4">
-                                            <div className="text-sm font-medium text-gray-900">
-                                                Atomic Habits
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    James Clear
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    Self-Help
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                        className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                    >Available</span
-                    >
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <button className="text-indigo-600 hover:text-indigo-900 mr-3">
-                                        <i className="fas fa-eye"></i>
-                                    </button>
-                                    <button className="text-indigo-600 hover:text-indigo-900 mr-3">
-                                        <i className="fas fa-edit"></i>
-                                    </button>
-                                    <button className="text-red-600 hover:text-red-900">
-                                        <i className="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                {
+                                    list.map((book) => (
+                                        <Book key={book.id} data={book}/>
+                                    ))
+                                }
+                                </tbody>
                         </table>
+                        <div className="p-4 border-t border-gray-200 text-center">
+                            <Link to='/books'>
+                                <button className="text-indigo-600 hover:text-indigo-800 font-medium">
+                                View All Books
+                                </button>
+                            </Link>
+                        </div>
                     </div>
-                    <div className="p-4 border-t border-gray-200 text-center">
-                        <button className="text-indigo-600 hover:text-indigo-800 font-medium">
-                            View All Books
-                        </button>
+                    </div>
+                    {/*Quick Actions*/}
+                    <div className="bg-white rounded-lg shadow">
+                        <div className="p-4 border-b border-gray-200">
+                            <h2 className="text-lg font-semibold text-gray-800">Quick Actions</h2>
+                        </div>
+                        <div className="p-4 grid grid-cols-2 gap-4">
+                            <button
+                                className="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 p-4 rounded-lg flex flex-col items-center transition"
+                            >
+                                <i className="fas fa-book-medical text-2xl mb-2"></i>
+                                <span>Add Book</span>
+                            </button>
+                            <button
+                                className="bg-green-100 hover:bg-green-200 text-green-800 p-4 rounded-lg flex flex-col items-center transition"
+                            >
+                                <i className="fas fa-user-plus text-2xl mb-2"></i>
+                                <span>Add Member</span>
+                            </button>
+                            <button
+                                className="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 p-4 rounded-lg flex flex-col items-center transition"
+                            >
+                                <i className="fas fa-exchange-alt text-2xl mb-2"></i>
+                                <span>Check Out</span>
+                            </button>
+                            <button
+                                className="bg-blue-100 hover:bg-blue-200 text-blue-800 p-4 rounded-lg flex flex-col items-center transition"
+                            >
+                                <i className="fas fa-undo-alt text-2xl mb-2"></i>
+                                <span>Return Book</span>
+                            </button>
+                            <button
+                                className="bg-purple-100 hover:bg-purple-200 text-purple-800 p-4 rounded-lg flex flex-col items-center transition"
+                            >
+                                <i className="fas fa-search text-2xl mb-2"></i>
+                                <span>Search Books</span>
+                            </button>
+                            <button
+                                className="bg-red-100 hover:bg-red-200 text-red-800 p-4 rounded-lg flex flex-col items-center transition"
+                            >
+                                <i className="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                                <span>Overdue</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                {/*Quick Actions*/}
-                <div className="bg-white rounded-lg shadow">
-                    <div className="p-4 border-b border-gray-200">
-                        <h2 className="text-lg font-semibold text-gray-800">Quick Actions</h2>
-                    </div>
-                    <div className="p-4 grid grid-cols-2 gap-4">
-                        <button
-                            className="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 p-4 rounded-lg flex flex-col items-center transition"
-                        >
-                            <i className="fas fa-book-medical text-2xl mb-2"></i>
-                            <span>Add Book</span>
-                        </button>
-                        <button
-                            className="bg-green-100 hover:bg-green-200 text-green-800 p-4 rounded-lg flex flex-col items-center transition"
-                        >
-                            <i className="fas fa-user-plus text-2xl mb-2"></i>
-                            <span>Add Member</span>
-                        </button>
-                        <button
-                            className="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 p-4 rounded-lg flex flex-col items-center transition"
-                        >
-                            <i className="fas fa-exchange-alt text-2xl mb-2"></i>
-                            <span>Check Out</span>
-                        </button>
-                        <button
-                            className="bg-blue-100 hover:bg-blue-200 text-blue-800 p-4 rounded-lg flex flex-col items-center transition"
-                        >
-                            <i className="fas fa-undo-alt text-2xl mb-2"></i>
-                            <span>Return Book</span>
-                        </button>
-                        <button
-                            className="bg-purple-100 hover:bg-purple-200 text-purple-800 p-4 rounded-lg flex flex-col items-center transition"
-                        >
-                            <i className="fas fa-search text-2xl mb-2"></i>
-                            <span>Search Books</span>
-                        </button>
-                        <button
-                            className="bg-red-100 hover:bg-red-200 text-red-800 p-4 rounded-lg flex flex-col items-center transition"
-                        >
-                            <i className="fas fa-exclamation-triangle text-2xl mb-2"></i>
-                            <span>Overdue</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            {/*Overdue Books*/}
-            <div className="bg-white rounded-lg shadow mb-6">
+                {/*Overdue Books*/}
+                <div className="bg-white rounded-lg shadow mb-6">
                 <div className="p-4 border-b border-gray-200">
                     <h2 className="text-lg font-semibold text-gray-800">Overdue Books</h2>
                 </div>
