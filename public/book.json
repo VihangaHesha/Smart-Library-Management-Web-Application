@@ -22,5 +22,21 @@
     "category": "Memoir",
     "quantity": 0,
     "status": "Overdue"
+  },
+  {
+    "id": 4,
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "category": "Classic",
+    "quantity": 3,
+    "status": "Available"
+  },
+  {
+    "id": 5,
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "category": "Classic",
+    "quantity": 1,
+    "status": "Checked Out"
   }
 ]

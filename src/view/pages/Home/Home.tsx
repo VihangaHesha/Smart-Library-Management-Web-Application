@@ -13,7 +13,11 @@ export function Home() {
     useEffect(() => {
         dispatch(getAllBooks())
     }, [dispatch]);
+    const books = useSelector((state:RootState) => state.books.list);
 
+    const totalBooks = books.length;
+    const overdueBooks = books.filter(book => book.status === "Overdue").length;
+    const checkedOutBooks = books.filter(book => book.status === "Checked Out").length;
 
     return (
         <div className="container mx-auto px-4 py-6">
@@ -27,14 +31,6 @@ export function Home() {
                         Welcome back! Here's what's happening today.
                     </p>
                 </div>
-                <div className="mt-4 md:mt-0 flex space-x-3">
-                    <button
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition"
-                    >
-                        <i className="fas fa-plus"></i>
-                        <span>Add Book</span>
-                    </button>
-                </div>
             </div>
             {/*Stats Cards*/}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -42,7 +38,7 @@ export function Home() {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-gray-500">Total Books</p>
-                            <h3 className="text-2xl font-bold">1,248</h3>
+                            <h3 className="text-2xl font-bold">{totalBooks}</h3>
                         </div>
                         <div className="bg-indigo-100 p-3 rounded-full">
                             <i className="fas fa-book text-indigo-600 text-xl"></i>
@@ -72,7 +68,7 @@ export function Home() {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-gray-500">Books Checked Out</p>
-                            <h3 className="text-2xl font-bold">87</h3>
+                            <h3 className="text-2xl font-bold">{checkedOutBooks}</h3>
                         </div>
                         <div className="bg-yellow-100 p-3 rounded-full">
                             <i className="fas fa-exchange-alt text-yellow-600 text-xl"></i>
@@ -87,7 +83,7 @@ export function Home() {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-gray-500">Overdue Books</p>
-                            <h3 className="text-2xl font-bold">14</h3>
+                            <h3 className="text-2xl font-bold">{overdueBooks}</h3>
                         </div>
                         <div className="bg-red-100 p-3 rounded-full">
                             <i className="fas fa-exclamation-triangle text-red-600 text-xl"></i>
