@@ -4,9 +4,9 @@ import {DefaultLayout} from "./view/common/DefaultLayout/DefaultLayout.tsx";
 function App(){
     return(
         <>
-                <Routes>
-                    <Route path="/*" element={<DefaultLayout/>}></Route>
-                </Routes>
+            <Routes>
+                <Route path="/*" element={<DefaultLayout/>}></Route>
+            </Routes>
         </>
     )
 }

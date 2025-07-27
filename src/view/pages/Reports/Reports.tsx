@@ -258,7 +258,8 @@ export const Reports = () => {
 
             {/* Detailed Transaction Report (for overview) */}
             {reportType === 'overview' && (
-            <div className="bg-white rounded-lg shadow mb-6">
+                <div>
+                <div className="bg-white rounded-lg shadow mb-6">
                 <div
                     className="p-4 border-b border-gray-200 flex flex-col md:flex-row md:justify-between md:items-center"
                 >
