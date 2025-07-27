@@ -1,9 +1,23 @@
 import type {BookData} from "../../../model/BookData.ts";
 
 type BookProps = {
-    data : BookData
+    data: BookData;
+    onEdit?: (book: BookData) => void;
+    onDelete?: (bookId: number) => void;
 }
-export function Book({data} : BookProps) {
+export function Book({ data, onEdit, onDelete }: BookProps) {
+    const handleEdit = () => {
+        if (onEdit) {
+            onEdit(data);
+        }
+    };
+
+    const handleDelete = () => {
+        if (onDelete) {
+            onDelete(data.id);
+        }
+    };
+
     return (
         <tr>
             <td className="px-6 py-4 whitespace-nowrap">
@@ -26,6 +40,9 @@ export function Book({data} : BookProps) {
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {data.category}
             </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {data.quantity}
+            </td>
             <td className="px-6 py-4 whitespace-nowrap">
                 <span
                     className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
@@ -40,10 +57,18 @@ export function Book({data} : BookProps) {
                 <button className="text-indigo-600 hover:text-indigo-900 mr-3">
                     <i className="fas fa-eye"></i>
                 </button>
-                <button className="text-indigo-600 hover:text-indigo-900 mr-3">
+                <button 
+                    className="text-indigo-600 hover:text-indigo-900 mr-3"
+                    onClick={handleEdit}
+                    title="Edit"
+                >
                     <i className="fas fa-edit"></i>
                 </button>
-                <button className="text-red-600 hover:text-red-900">
+                <button 
+                    className="text-red-600 hover:text-red-900"
+                    onClick={handleDelete}
+                    title="Delete"
+                >
                     <i className="fas fa-trash"></i>
                 </button>
             </td>

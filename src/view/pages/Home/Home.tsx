@@ -2,17 +2,32 @@ import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import type {AppDispatch, RootState} from "../../../store/store.ts";
 import {getAllBooks} from "../../../slices/booksSlice.ts";
+import {getDashboardStats} from "../../../slices/reportsSlice.ts";
 import {Book} from "../../common/Book/Book.tsx";
 import {Link} from "react-router-dom";
 import {OverDue} from "../../common/Book/OverDue.tsx";
+import {LoadingSpinner} from "../../common/LoadingSpinner/LoadingSpinner.tsx";
 
 export function Home() {
 
     const dispatch = useDispatch<AppDispatch>();
-    const { list } = useSelector((state: RootState) => state.books);
+    const { list: books, loading: booksLoading } = useSelector((state: RootState) => state.books);
+    const { dashboardStats, loading: reportsLoading } = useSelector((state: RootState) => state.reports);
+    
     useEffect(() => {
-        dispatch(getAllBooks())
+        dispatch(getAllBooks());
+        dispatch(getDashboardStats());
     }, [dispatch]);
+
+    const loading = booksLoading || reportsLoading;
+
+    if (loading) {
+        return (
+            <div className="container mx-auto px-4 py-6">
+                <LoadingSpinner size="lg" text="Loading dashboard..." />
+            </div>
+        );
+    }
 
 
     return (
@@ -42,14 +57,15 @@ export function Home() {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-gray-500">Total Books</p>
-                            <h3 className="text-2xl font-bold">1,248</h3>
+                            <h3 className="text-2xl font-bold">{dashboardStats?.totalBooks.toLocaleString() || '1,248'}</h3>
                         </div>
                         <div className="bg-indigo-100 p-3 rounded-full">
                             <i className="fas fa-book text-indigo-600 text-xl"></i>
                         </div>
                     </div>
-                    <p className="text-green-500 text-sm mt-2">
-                        <i className="fas fa-arrow-up"></i> 12% from last month
+                    <p className={`text-sm mt-2 ${dashboardStats?.monthlyGrowth.books >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        <i className={`fas ${dashboardStats?.monthlyGrowth.books >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i> 
+                        {dashboardStats?.monthlyGrowth.books >= 0 ? '+' : ''}{dashboardStats?.monthlyGrowth.books || 12}% from last month
                     </p>
                 </div>
 
@@ -57,14 +73,15 @@ export function Home() {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-gray-500">Active Members</p>
-                            <h3 className="text-2xl font-bold">342</h3>
+                            <h3 className="text-2xl font-bold">{dashboardStats?.activeMembers || '342'}</h3>
                         </div>
                         <div className="bg-green-100 p-3 rounded-full">
                             <i className="fas fa-users text-green-600 text-xl"></i>
                         </div>
                     </div>
-                    <p className="text-green-500 text-sm mt-2">
-                        <i className="fas fa-arrow-up"></i> 8% from last month
+                    <p className={`text-sm mt-2 ${dashboardStats?.monthlyGrowth.members >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        <i className={`fas ${dashboardStats?.monthlyGrowth.members >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i> 
+                        {dashboardStats?.monthlyGrowth.members >= 0 ? '+' : ''}{dashboardStats?.monthlyGrowth.members || 8}% from last month
                     </p>
                 </div>
 
@@ -72,14 +89,15 @@ export function Home() {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-gray-500">Books Checked Out</p>
-                            <h3 className="text-2xl font-bold">87</h3>
+                            <h3 className="text-2xl font-bold">{dashboardStats?.booksCheckedOut || '87'}</h3>
                         </div>
                         <div className="bg-yellow-100 p-3 rounded-full">
                             <i className="fas fa-exchange-alt text-yellow-600 text-xl"></i>
                         </div>
                     </div>
-                    <p className="text-red-500 text-sm mt-2">
-                        <i className="fas fa-arrow-down"></i> 3% from last month
+                    <p className={`text-sm mt-2 ${dashboardStats?.monthlyGrowth.checkouts >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        <i className={`fas ${dashboardStats?.monthlyGrowth.checkouts >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i> 
+                        {dashboardStats?.monthlyGrowth.checkouts >= 0 ? '+' : ''}{dashboardStats?.monthlyGrowth.checkouts || -3}% from last month
                     </p>
                 </div>
 
@@ -87,14 +105,15 @@ export function Home() {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-gray-500">Overdue Books</p>
-                            <h3 className="text-2xl font-bold">14</h3>
+                            <h3 className="text-2xl font-bold">{dashboardStats?.overdueBooks || '14'}</h3>
                         </div>
                         <div className="bg-red-100 p-3 rounded-full">
                             <i className="fas fa-exclamation-triangle text-red-600 text-xl"></i>
                         </div>
                     </div>
-                    <p className="text-red-500 text-sm mt-2">
-                        <i className="fas fa-arrow-up"></i> 2% from last month
+                    <p className={`text-sm mt-2 ${dashboardStats?.monthlyGrowth.overdue >= 0 ? 'text-red-500' : 'text-green-500'}`}>
+                        <i className={`fas ${dashboardStats?.monthlyGrowth.overdue >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i> 
+                        {dashboardStats?.monthlyGrowth.overdue >= 0 ? '+' : ''}{dashboardStats?.monthlyGrowth.overdue || 2}% from last month
                     </p>
                 </div>
             </div>
@@ -139,7 +158,7 @@ export function Home() {
                             </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                 {
-                                    list.map((book) => (
+                                    books.slice(0, 5).map((book) => (
                                         <Book key={book.id} data={book}/>
                                     ))
                                 }
@@ -241,7 +260,7 @@ export function Home() {
                         </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                        <OverDue books={list} />
+                        <OverDue books={books} />
                         </tbody>
                     </table>
                 </div>
