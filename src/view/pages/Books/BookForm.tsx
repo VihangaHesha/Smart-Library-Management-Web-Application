@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import type { BookData } from '../../../model/BookData';
 
@@ -40,7 +40,10 @@ export const BookForm = ({ book, onSubmit, onCancel }: BookFormProps) => {
         onSubmit(data);
     };
 
+    console.log("Book Form Rendered")
+
     return (
+
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
             {/* Title */}
             <div>

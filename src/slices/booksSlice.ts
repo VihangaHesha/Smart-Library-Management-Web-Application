@@ -26,22 +26,6 @@ const mockBooks: BookData[] = [
         category: "Memoir",
         quantity: 0,
         status: "Overdue"
-    },
-    {
-        id: 4,
-        title: "The Psychology of Money",
-        author: "Morgan Housel",
-        category: "Finance",
-        quantity: 3,
-        status: "Available"
-    },
-    {
-        id: 5,
-        title: "Sapiens",
-        author: "Yuval Noah Harari",
-        category: "History",
-        quantity: 4,
-        status: "Available"
     }
 ];
 

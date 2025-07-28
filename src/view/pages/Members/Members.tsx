@@ -130,12 +130,7 @@ export function Members() {
                         <i className="fas fa-user-plus"></i>
                         <span>Add Member</span>
                     </button>
-                    <button
-                        className="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg border border-gray-300 flex items-center space-x-2 transition"
-                    >
-                        <i className="fas fa-filter"></i>
-                        <span>Filter</span>
-                    </button>
+
                 </div>
             </div>
             {/*Member Table*/}

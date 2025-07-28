@@ -33,8 +33,8 @@ export const Books = () => {
     const categories = Array.from(new Set(books.map(book => book.category)));
 
     const handleAddBook = () => {
-        setEditingBook(undefined);
         setIsModalOpen(true);
+        setEditingBook(undefined);
     };
 
     const handleEditBook = (book: BookData) => {

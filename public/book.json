@@ -25,18 +25,18 @@
   },
   {
     "id": 4,
-    "title": "To Kill a Mockingbird",
-    "author": "Harper Lee",
-    "category": "Classic",
+    "title": "The Psychology of Money",
+    "author": "Morgan Housel",
+    "category": "Finance",
     "quantity": 3,
     "status": "Available"
   },
   {
     "id": 5,
-    "title": "The Great Gatsby",
-    "author": "F. Scott Fitzgerald",
-    "category": "Classic",
-    "quantity": 1,
-    "status": "Checked Out"
+    "title": "Sapiens",
+    "author": "Yuval Noah Harari",
+    "category": "History",
+    "quantity": 4,
+    "status": "Available"
   }
 ]

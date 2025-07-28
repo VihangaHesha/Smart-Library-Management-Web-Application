@@ -29,6 +29,12 @@ export function Home() {
         );
     }
 
+    const bookGrowth = dashboardStats?.monthlyGrowth?.books ?? 0;
+    const memberGrowth = dashboardStats?.monthlyGrowth?.members ?? 0;
+    const checkoutsGrowth = dashboardStats?.monthlyGrowth?.checkouts ?? 0;
+    const overdueGrowth = dashboardStats?.monthlyGrowth?.overdue ?? 0;
+
+
 
     return (
         <div className="container mx-auto px-4 py-6">
@@ -63,10 +69,11 @@ export function Home() {
                             <i className="fas fa-book text-indigo-600 text-xl"></i>
                         </div>
                     </div>
-                    <p className={`text-sm mt-2 ${dashboardStats?.monthlyGrowth.books >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        <i className={`fas ${dashboardStats?.monthlyGrowth.books >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i> 
-                        {dashboardStats?.monthlyGrowth.books >= 0 ? '+' : ''}{dashboardStats?.monthlyGrowth.books || 12}% from last month
+                    <p className={`text-sm mt-2 ${bookGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        <i className={`fas ${bookGrowth >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
+                        {bookGrowth >= 0 ? '+' : ''}{bookGrowth}% from last month
                     </p>
+
                 </div>
 
                 <div className="bg-white rounded-lg shadow p-6">
@@ -79,9 +86,9 @@ export function Home() {
                             <i className="fas fa-users text-green-600 text-xl"></i>
                         </div>
                     </div>
-                    <p className={`text-sm mt-2 ${dashboardStats?.monthlyGrowth.members >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        <i className={`fas ${dashboardStats?.monthlyGrowth.members >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i> 
-                        {dashboardStats?.monthlyGrowth.members >= 0 ? '+' : ''}{dashboardStats?.monthlyGrowth.members || 8}% from last month
+                    <p className={`text-sm mt-2 ${memberGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        <i className={`fas ${memberGrowth >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
+                        {memberGrowth >= 0 ? '+' : ''}{memberGrowth || 8}% from last month
                     </p>
                 </div>
 
@@ -95,9 +102,9 @@ export function Home() {
                             <i className="fas fa-exchange-alt text-yellow-600 text-xl"></i>
                         </div>
                     </div>
-                    <p className={`text-sm mt-2 ${dashboardStats?.monthlyGrowth.checkouts >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        <i className={`fas ${dashboardStats?.monthlyGrowth.checkouts >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i> 
-                        {dashboardStats?.monthlyGrowth.checkouts >= 0 ? '+' : ''}{dashboardStats?.monthlyGrowth.checkouts || -3}% from last month
+                    <p className={`text-sm mt-2 ${checkoutsGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        <i className={`fas ${checkoutsGrowth >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
+                        {checkoutsGrowth >= 0 ? '+' : ''}{checkoutsGrowth || -3}% from last month
                     </p>
                 </div>
 
@@ -111,9 +118,9 @@ export function Home() {
                             <i className="fas fa-exclamation-triangle text-red-600 text-xl"></i>
                         </div>
                     </div>
-                    <p className={`text-sm mt-2 ${dashboardStats?.monthlyGrowth.overdue >= 0 ? 'text-red-500' : 'text-green-500'}`}>
-                        <i className={`fas ${dashboardStats?.monthlyGrowth.overdue >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i> 
-                        {dashboardStats?.monthlyGrowth.overdue >= 0 ? '+' : ''}{dashboardStats?.monthlyGrowth.overdue || 2}% from last month
+                    <p className={`text-sm mt-2 ${overdueGrowth >= 0 ? 'text-red-500' : 'text-green-500'}`}>
+                        <i className={`fas ${overdueGrowth >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
+                        {overdueGrowth >= 0 ? '+' : ''}{overdueGrowth || 2}% from last month
                     </p>
                 </div>
             </div>
@@ -156,13 +163,13 @@ export function Home() {
                                 </th>
                             </tr>
                             </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="bg-white divide-y divide-gray-200">
                                 {
-                                    books.slice(0, 5).map((book) => (
-                                        <Book key={book.id} data={book}/>
+                                    books.slice(0, 3).map((book) => (
+                                        <Book key={book.id} data={book} />
                                     ))
                                 }
-                                </tbody>
+                            </tbody>
                         </table>
                         <div className="p-4 border-t border-gray-200 text-center">
                             <Link to='/books'>

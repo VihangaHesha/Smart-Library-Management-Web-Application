@@ -105,16 +105,6 @@ export const Reports = () => {
                         <option value="quarter">This Quarter</option>
                         <option value="year">This Year</option>
                     </select>
-                    <button className="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg border border-gray-300 flex items-center space-x-2 transition">
-                        <i className="fas fa-chart-bar"></i>
-                        <span>Generate Report</span>
-                    </button>
-                    <button
-                        className="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg border border-gray-300 flex items-center space-x-2 transition"
-                    >
-                        <i className="fas fa-filter"></i>
-                        <span>Filter</span>
-                    </button>
                 </div>
             </div>
             {/*Report Summery Cards*/}

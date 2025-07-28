@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import {  useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store/store';
@@ -27,8 +27,8 @@ export const TransactionForm = ({ transaction, onSubmit, onCancel }: Transaction
     const { list: members } = useSelector((state: RootState) => state.members);
     
     const watchType = watch('type');
-    const watchBookId = watch('bookId');
-    const watchMemberId = watch('memberId');
+    /*const watchBookId = watch('bookId');
+    const watchMemberId = watch('memberId');*/
 
     useEffect(() => {
         if (transaction) {
