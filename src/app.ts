@@ -1,13 +1,10 @@
 import express, {Express} from "express";
 import cors from "cors";
-/*
-import {userRouter} from "./routes/userRouter";
-import {bookRouter} from "./routes/bookRouter";
-import {issueRouter} from "./routes/issueRouter";
-import {returnRouter} from "./routes/returnRouter";
-import {authRouter} from "./routes/authRouter";
-import {adminRouter} from "./routes/adminRouter";
-import {authMiddleware} from "./middlewares/authMiddleware";*/
+import bookRouter from "./routes/book.route";
+import authRouter from "./routes/auth.route";
+import reportRouter from "./routes/report.route";
+import memberRouter from "./routes/member.route";
+import transactionRouter from "./routes/transactions.route";
 
 const app : Express = express()
 
@@ -27,14 +24,10 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
-
-/*
-app.use("/api/user",userRouter)
-app.use("/api/book",bookRouter)
-app.use("/api/issue",issueRouter)
-app.use("/api/return",returnRouter)
-app.use("/api/auth",authRouter)
-app.use("/api/admin",adminRouter)
-app.use(authMiddleware)*/
+app.use("/books", bookRouter)
+app.use("/auth", authRouter)
+app.use("/reports", reportRouter)
+app.use("/members", memberRouter)
+app.use("/transactions", transactionRouter)
 
 export default app;

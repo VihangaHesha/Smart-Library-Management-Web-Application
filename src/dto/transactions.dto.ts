@@ -1,5 +1,5 @@
 export interface TransactionsDto{
-    id: string;
+    id: number;
     bookId: number;
     bookTitle: string;
     bookAuthor: string;
@@ -9,7 +9,7 @@ export interface TransactionsDto{
     type: 'Borrow' | 'Return';
     borrowDate: string;
     dueDate: string;
-    returnDate?: string;
+    returnDate?: Date;
     status: 'Active' | 'Completed' | 'Overdue';
     fine?: number;
 }

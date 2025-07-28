@@ -45,7 +45,8 @@ const transactionSchema = new mongoose.Schema({
         required: true
     },
     returnDate: {
-        type: String
+        type: Date,
+        required: false
     },
     status: {
         type: String,
