@@ -1,51 +1,38 @@
-// In-memory data storage for transactions
+// Sample transactions data
 let transactions = [
   {
-    id: "TXN-10123",
-    bookId: 2,
-    bookTitle: "The Silent Patient",
-    bookAuthor: "Alex Michaelides",
-    memberId: "M-10234",
-    memberName: "Emily Brown",
-    memberEmail: "emily.brown@example.com",
-    type: "Borrow",
-    borrowDate: "2025-01-15",
-    dueDate: "2025-01-29",
-    status: "Active"
+    id: '1',
+    bookId: '1',
+    memberId: '1',
+    type: 'borrow',
+    borrowDate: '2024-01-20',
+    dueDate: '2024-02-03',
+    returnDate: null,
+    status: 'borrowed',
+    fine: 0
   },
   {
-    id: "TXN-10124",
-    bookId: 3,
-    bookTitle: "Educated",
-    bookAuthor: "Tara Westover",
-    memberId: "M-10235",
-    memberName: "David Lee",
-    memberEmail: "david.lee@example.com",
-    type: "Return",
-    borrowDate: "2025-01-10",
-    dueDate: "2025-01-24",
-    returnDate: "2025-01-20",
-    status: "Completed"
+    id: '2',
+    bookId: '2',
+    memberId: '2',
+    type: 'borrow',
+    borrowDate: '2024-01-18',
+    dueDate: '2024-02-01',
+    returnDate: null,
+    status: 'overdue',
+    fine: 5.00
   },
   {
-    id: "TXN-10125",
-    bookId: 1,
-    bookTitle: "Atomic Habits",
-    bookAuthor: "James Clear",
-    memberId: "M-10236",
-    memberName: "Priya Singh",
-    memberEmail: "priya.singh@example.com",
-    type: "Borrow",
-    borrowDate: "2025-01-05",
-    dueDate: "2025-01-19",
-    status: "Overdue",
-    fine: 3.50
+    id: '3',
+    bookId: '3',
+    memberId: '1',
+    type: 'borrow',
+    borrowDate: '2024-01-15',
+    dueDate: '2024-01-29',
+    returnDate: '2024-01-28',
+    status: 'returned',
+    fine: 0
   }
 ];
 
-let nextId = 10126;
-
-module.exports = {
-  transactions,
-  getNextId: () => `TXN-${nextId++}`
-};
+module.exports = { transactions };

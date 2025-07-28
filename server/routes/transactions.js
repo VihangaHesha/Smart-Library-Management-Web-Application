@@ -1,144 +1,195 @@
 const express = require('express');
-const router = express.Router();
-const { transactions, getNextId } = require('../data/transactions');
+const { v4: uuidv4 } = require('uuid');
+const { transactions } = require('../data/transactions');
 const { books } = require('../data/books');
 const { members } = require('../data/members');
 
-// GET /api/transactions - Get all transactions
+const router = express.Router();
+
+// Get all transactions with optional filtering
 router.get('/', (req, res) => {
-  const { status, type, memberId, bookId } = req.query;
-  
-  let filteredTransactions = transactions;
-  
-  if (status) {
-    filteredTransactions = filteredTransactions.filter(t => t.status === status);
+  try {
+    let filteredTransactions = [...transactions];
+    
+    // Filter by status
+    if (req.query.status) {
+      filteredTransactions = filteredTransactions.filter(t => 
+        t.status === req.query.status
+      );
+    }
+    
+    // Filter by member ID
+    if (req.query.memberId) {
+      filteredTransactions = filteredTransactions.filter(t => 
+        t.memberId === req.query.memberId
+      );
+    }
+    
+    // Filter by book ID
+    if (req.query.bookId) {
+      filteredTransactions = filteredTransactions.filter(t => 
+        t.bookId === req.query.bookId
+      );
+    }
+    
+    // Add book and member details to each transaction
+    const enrichedTransactions = filteredTransactions.map(transaction => {
+      const book = books.find(b => b.id === transaction.bookId);
+      const member = members.find(m => m.id === transaction.memberId);
+      
+      return {
+        ...transaction,
+        bookTitle: book ? book.title : 'Unknown Book',
+        bookAuthor: book ? book.author : 'Unknown Author',
+        memberName: member ? member.name : 'Unknown Member'
+      };
+    });
+    
+    res.json(enrichedTransactions);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch transactions' });
   }
-  
-  if (type) {
-    filteredTransactions = filteredTransactions.filter(t => t.type === type);
-  }
-  
-  if (memberId) {
-    filteredTransactions = filteredTransactions.filter(t => t.memberId === memberId);
-  }
-  
-  if (bookId) {
-    filteredTransactions = filteredTransactions.filter(t => t.bookId === parseInt(bookId));
-  }
-  
-  res.json(filteredTransactions);
 });
 
-// GET /api/transactions/:id - Get transaction by ID
+// Get single transaction by ID
 router.get('/:id', (req, res) => {
-  const transactionId = req.params.id;
-  const transaction = transactions.find(t => t.id === transactionId);
-  
-  if (!transaction) {
-    return res.status(404).json({ error: 'Transaction not found' });
+  try {
+    const transaction = transactions.find(t => t.id === req.params.id);
+    if (!transaction) {
+      return res.status(404).json({ error: 'Transaction not found' });
+    }
+    
+    const book = books.find(b => b.id === transaction.bookId);
+    const member = members.find(m => m.id === transaction.memberId);
+    
+    res.json({
+      ...transaction,
+      book,
+      member
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch transaction' });
   }
-  
-  res.json(transaction);
 });
 
-// POST /api/transactions - Add new transaction
-router.post('/', (req, res) => {
-  const { bookId, memberId, type, borrowDate, dueDate, returnDate, status, fine } = req.body;
-  
-  if (!bookId || !memberId || !type) {
-    return res.status(400).json({ error: 'BookId, memberId, and type are required' });
+// Create new borrow transaction
+router.post('/borrow', (req, res) => {
+  try {
+    const { bookId, memberId } = req.body;
+    
+    if (!bookId || !memberId) {
+      return res.status(400).json({ error: 'Book ID and Member ID are required' });
+    }
+    
+    // Check if book exists and is available
+    const book = books.find(b => b.id === bookId);
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    
+    if (book.availableCopies <= 0) {
+      return res.status(400).json({ error: 'Book not available' });
+    }
+    
+    // Check if member exists
+    const member = members.find(m => m.id === memberId);
+    if (!member) {
+      return res.status(404).json({ error: 'Member not found' });
+    }
+    
+    // Calculate due date (14 days from now)
+    const borrowDate = new Date();
+    const dueDate = new Date();
+    dueDate.setDate(dueDate.getDate() + 14);
+    
+    const newTransaction = {
+      id: uuidv4(),
+      bookId,
+      memberId,
+      type: 'borrow',
+      borrowDate: borrowDate.toISOString().split('T')[0],
+      dueDate: dueDate.toISOString().split('T')[0],
+      returnDate: null,
+      status: 'borrowed',
+      fine: 0
+    };
+    
+    transactions.push(newTransaction);
+    
+    // Update book availability
+    book.availableCopies -= 1;
+    
+    // Update member borrowed books count
+    member.borrowedBooks += 1;
+    
+    res.status(201).json(newTransaction);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create borrow transaction' });
   }
-  
-  // Find book and member details
-  const book = books.find(b => b.id === parseInt(bookId));
-  const member = members.find(m => m.id === memberId);
-  
-  if (!book) {
-    return res.status(404).json({ error: 'Book not found' });
-  }
-  
-  if (!member) {
-    return res.status(404).json({ error: 'Member not found' });
-  }
-  
-  const newTransaction = {
-    id: getNextId(),
-    bookId: parseInt(bookId),
-    bookTitle: book.title,
-    bookAuthor: book.author,
-    memberId,
-    memberName: member.name,
-    memberEmail: member.email,
-    type,
-    borrowDate: borrowDate || new Date().toISOString().split('T')[0],
-    dueDate: dueDate || (() => {
-      const date = new Date();
-      date.setDate(date.getDate() + 14);
-      return date.toISOString().split('T')[0];
-    })(),
-    returnDate: returnDate || null,
-    status: status || 'Active',
-    fine: fine || 0
-  };
-  
-  transactions.push(newTransaction);
-  res.status(201).json(newTransaction);
 });
 
-// PUT /api/transactions/:id - Update transaction
-router.put('/:id', (req, res) => {
-  const transactionId = req.params.id;
-  const transactionIndex = transactions.findIndex(t => t.id === transactionId);
-  
-  if (transactionIndex === -1) {
-    return res.status(404).json({ error: 'Transaction not found' });
+// Return book
+router.post('/return/:id', (req, res) => {
+  try {
+    const transactionIndex = transactions.findIndex(t => t.id === req.params.id);
+    if (transactionIndex === -1) {
+      return res.status(404).json({ error: 'Transaction not found' });
+    }
+    
+    const transaction = transactions[transactionIndex];
+    
+    if (transaction.status !== 'borrowed' && transaction.status !== 'overdue') {
+      return res.status(400).json({ error: 'Book is not currently borrowed' });
+    }
+    
+    // Calculate fine if overdue
+    const returnDate = new Date();
+    const dueDate = new Date(transaction.dueDate);
+    let fine = 0;
+    
+    if (returnDate > dueDate) {
+      const daysOverdue = Math.ceil((returnDate - dueDate) / (1000 * 60 * 60 * 24));
+      fine = daysOverdue * 1.0; // $1 per day fine
+    }
+    
+    // Update transaction
+    transaction.returnDate = returnDate.toISOString().split('T')[0];
+    transaction.status = 'returned';
+    transaction.fine = fine;
+    
+    // Update book availability
+    const book = books.find(b => b.id === transaction.bookId);
+    if (book) {
+      book.availableCopies += 1;
+    }
+    
+    // Update member borrowed books count
+    const member = members.find(m => m.id === transaction.memberId);
+    if (member) {
+      member.borrowedBooks -= 1;
+    }
+    
+    res.json(transaction);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to return book' });
   }
-  
-  const { type, borrowDate, dueDate, returnDate, status, fine } = req.body;
-  
-  transactions[transactionIndex] = {
-    ...transactions[transactionIndex],
-    type: type || transactions[transactionIndex].type,
-    borrowDate: borrowDate || transactions[transactionIndex].borrowDate,
-    dueDate: dueDate || transactions[transactionIndex].dueDate,
-    returnDate: returnDate !== undefined ? returnDate : transactions[transactionIndex].returnDate,
-    status: status || transactions[transactionIndex].status,
-    fine: fine !== undefined ? parseFloat(fine) : transactions[transactionIndex].fine
-  };
-  
-  res.json(transactions[transactionIndex]);
 });
 
-// DELETE /api/transactions/:id - Delete transaction
-router.delete('/:id', (req, res) => {
-  const transactionId = req.params.id;
-  const transactionIndex = transactions.findIndex(t => t.id === transactionId);
-  
-  if (transactionIndex === -1) {
-    return res.status(404).json({ error: 'Transaction not found' });
+// Update transaction status (for marking overdue books)
+router.put('/:id/status', (req, res) => {
+  try {
+    const { status } = req.body;
+    const transactionIndex = transactions.findIndex(t => t.id === req.params.id);
+    
+    if (transactionIndex === -1) {
+      return res.status(404).json({ error: 'Transaction not found' });
+    }
+    
+    transactions[transactionIndex].status = status;
+    res.json(transactions[transactionIndex]);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update transaction status' });
   }
-  
-  transactions.splice(transactionIndex, 1);
-  res.json({ message: 'Transaction deleted successfully' });
-});
-
-// POST /api/transactions/:id/return - Mark transaction as returned
-router.post('/:id/return', (req, res) => {
-  const transactionId = req.params.id;
-  const transactionIndex = transactions.findIndex(t => t.id === transactionId);
-  
-  if (transactionIndex === -1) {
-    return res.status(404).json({ error: 'Transaction not found' });
-  }
-  
-  transactions[transactionIndex] = {
-    ...transactions[transactionIndex],
-    type: 'Return',
-    status: 'Completed',
-    returnDate: new Date().toISOString().split('T')[0]
-  };
-  
-  res.json(transactions[transactionIndex]);
 });
 
 module.exports = router;

@@ -1,31 +1,35 @@
-// In-memory data storage for members
+// Sample members data
 let members = [
   {
-    id: "M-10231",
-    name: "Emily Brown",
-    email: "emily.brown@example.com",
-    membershipDate: "2024-03-15",
-    booksCheckedOut: 2
+    id: '1',
+    name: 'John Doe',
+    email: 'john.doe@email.com',
+    phone: '+1-555-0123',
+    address: '123 Main St, City, State 12345',
+    membershipDate: '2024-01-10',
+    status: 'active',
+    borrowedBooks: 2
   },
   {
-    id: "M-10235",
-    name: "David Lee",
-    email: "david.lee@example.com",
-    membershipDate: "2024-02-22",
-    booksCheckedOut: 1
+    id: '2',
+    name: 'Jane Smith',
+    email: 'jane.smith@email.com',
+    phone: '+1-555-0124',
+    address: '456 Oak Ave, City, State 12346',
+    membershipDate: '2024-01-12',
+    status: 'active',
+    borrowedBooks: 1
   },
   {
-    id: "M-10236",
-    name: "Priya Singh",
-    email: "priya.singh@example.com",
-    membershipDate: "2023-12-02",
-    booksCheckedOut: 0
+    id: '3',
+    name: 'Bob Johnson',
+    email: 'bob.johnson@email.com',
+    phone: '+1-555-0125',
+    address: '789 Pine Rd, City, State 12347',
+    membershipDate: '2024-01-14',
+    status: 'inactive',
+    borrowedBooks: 0
   }
 ];
 
-let nextId = 10237;
-
-module.exports = {
-  members,
-  getNextId: () => `M-${nextId++}`
-};
+module.exports = { members };

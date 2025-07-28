@@ -3,10 +3,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 // Import routes
-const bookRoutes = require('./routes/books');
-const memberRoutes = require('./routes/members');
-const transactionRoutes = require('./routes/transactions');
-const reportRoutes = require('./routes/reports');
+const booksRoutes = require('./routes/books');
+const membersRoutes = require('./routes/members');
+const transactionsRoutes = require('./routes/transactions');
+const reportsRoutes = require('./routes/reports');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,12 +17,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/books', bookRoutes);
-app.use('/api/members', memberRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/reports', reportRoutes);
+app.use('/api/books', booksRoutes);
+app.use('/api/members', membersRoutes);
+app.use('/api/transactions', transactionsRoutes);
+app.use('/api/reports', reportsRoutes);
 
-// Health check route
+// Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'BookNest API is running' });
 });
@@ -39,5 +39,5 @@ app.use('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`BookNest API server running on port ${PORT}`);
 });

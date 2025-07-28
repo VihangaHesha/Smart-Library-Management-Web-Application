@@ -1,91 +1,138 @@
 const express = require('express');
+const { v4: uuidv4 } = require('uuid');
+const { members } = require('../data/members');
+const { transactions } = require('../data/transactions');
+
 const router = express.Router();
-const { members, getNextId } = require('../data/members');
 
-// GET /api/members - Get all members
+// Get all members with optional filtering
 router.get('/', (req, res) => {
-  res.json(members);
+  try {
+    let filteredMembers = [...members];
+    
+    // Filter by status
+    if (req.query.status) {
+      filteredMembers = filteredMembers.filter(member => 
+        member.status === req.query.status
+      );
+    }
+    
+    // Search by name or email
+    if (req.query.search) {
+      const searchTerm = req.query.search.toLowerCase();
+      filteredMembers = filteredMembers.filter(member => 
+        member.name.toLowerCase().includes(searchTerm) ||
+        member.email.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    res.json(filteredMembers);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch members' });
+  }
 });
 
-// GET /api/members/:id - Get member by ID
+// Get single member by ID
 router.get('/:id', (req, res) => {
-  const memberId = req.params.id;
-  const member = members.find(m => m.id === memberId);
-  
-  if (!member) {
-    return res.status(404).json({ error: 'Member not found' });
+  try {
+    const member = members.find(m => m.id === req.params.id);
+    if (!member) {
+      return res.status(404).json({ error: 'Member not found' });
+    }
+    
+    // Include member's transaction history
+    const memberTransactions = transactions.filter(t => t.memberId === req.params.id);
+    
+    res.json({
+      ...member,
+      transactions: memberTransactions
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch member' });
   }
-  
-  res.json(member);
 });
 
-// POST /api/members - Add new member
+// Add new member
 router.post('/', (req, res) => {
-  const { name, email, membershipDate, booksCheckedOut } = req.body;
-  
-  if (!name || !email) {
-    return res.status(400).json({ error: 'Name and email are required' });
-  }
-  
-  // Check if email already exists
-  const existingMember = members.find(m => m.email === email);
-  if (existingMember) {
-    return res.status(400).json({ error: 'Email already exists' });
-  }
-  
-  const newMember = {
-    id: getNextId(),
-    name,
-    email,
-    membershipDate: membershipDate || new Date().toISOString().split('T')[0],
-    booksCheckedOut: booksCheckedOut || 0
-  };
-  
-  members.push(newMember);
-  res.status(201).json(newMember);
-});
-
-// PUT /api/members/:id - Update member
-router.put('/:id', (req, res) => {
-  const memberId = req.params.id;
-  const memberIndex = members.findIndex(m => m.id === memberId);
-  
-  if (memberIndex === -1) {
-    return res.status(404).json({ error: 'Member not found' });
-  }
-  
-  const { name, email, membershipDate, booksCheckedOut } = req.body;
-  
-  // Check if email already exists for another member
-  if (email && email !== members[memberIndex].email) {
-    const existingMember = members.find(m => m.email === email && m.id !== memberId);
+  try {
+    const { name, email, phone, address } = req.body;
+    
+    // Basic validation
+    if (!name || !email) {
+      return res.status(400).json({ error: 'Name and email are required' });
+    }
+    
+    // Check if email already exists
+    const existingMember = members.find(m => m.email === email);
     if (existingMember) {
       return res.status(400).json({ error: 'Email already exists' });
     }
+    
+    const newMember = {
+      id: uuidv4(),
+      name,
+      email,
+      phone: phone || '',
+      address: address || '',
+      membershipDate: new Date().toISOString().split('T')[0],
+      status: 'active',
+      borrowedBooks: 0
+    };
+    
+    members.push(newMember);
+    res.status(201).json(newMember);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to add member' });
   }
-  
-  members[memberIndex] = {
-    ...members[memberIndex],
-    name: name || members[memberIndex].name,
-    email: email || members[memberIndex].email,
-    membershipDate: membershipDate || members[memberIndex].membershipDate,
-    booksCheckedOut: booksCheckedOut !== undefined ? parseInt(booksCheckedOut) : members[memberIndex].booksCheckedOut
-  };
-  
-  res.json(members[memberIndex]);
 });
 
-// DELETE /api/members/:id - Delete member
-router.delete('/:id', (req, res) => {
-  const memberId = req.params.id;
-  const memberIndex = members.findIndex(m => m.id === memberId);
-  
-  if (memberIndex === -1) {
-    return res.status(404).json({ error: 'Member not found' });
+// Update member
+router.put('/:id', (req, res) => {
+  try {
+    const memberIndex = members.findIndex(m => m.id === req.params.id);
+    if (memberIndex === -1) {
+      return res.status(404).json({ error: 'Member not found' });
+    }
+    
+    // Check email uniqueness if email is being updated
+    if (req.body.email && req.body.email !== members[memberIndex].email) {
+      const existingMember = members.find(m => m.email === req.body.email);
+      if (existingMember) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+    }
+    
+    const updatedMember = { ...members[memberIndex], ...req.body };
+    members[memberIndex] = updatedMember;
+    
+    res.json(updatedMember);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update member' });
   }
-  
-  members.splice(memberIndex, 1);
-  res.json({ message: 'Member deleted successfully' });
+});
+
+// Delete member
+router.delete('/:id', (req, res) => {
+  try {
+    const memberIndex = members.findIndex(m => m.id === req.params.id);
+    if (memberIndex === -1) {
+      return res.status(404).json({ error: 'Member not found' });
+    }
+    
+    // Check if member has active borrows
+    const activeBorrows = transactions.filter(t => 
+      t.memberId === req.params.id && t.status === 'borrowed'
+    );
+    
+    if (activeBorrows.length > 0) {
+      return res.status(400).json({ error: 'Cannot delete member with active borrows' });
+    }
+    
+    members.splice(memberIndex, 1);
+    res.json({ message: 'Member deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete member' });
+  }
 });
 
 module.exports = router;

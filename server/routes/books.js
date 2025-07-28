@@ -1,97 +1,139 @@
 const express = require('express');
+const { v4: uuidv4 } = require('uuid');
+const { books } = require('../data/books');
+const { transactions } = require('../data/transactions');
+
 const router = express.Router();
-const { books, getNextId } = require('../data/books');
 
-// GET /api/books - Get all books
+// Get all books with optional filtering
 router.get('/', (req, res) => {
-  const { category, status } = req.query;
-  
-  let filteredBooks = books;
-  
-  if (category) {
-    filteredBooks = filteredBooks.filter(book => book.category === category);
+  try {
+    let filteredBooks = [...books];
+    
+    // Filter by category
+    if (req.query.category) {
+      filteredBooks = filteredBooks.filter(book => 
+        book.category.toLowerCase().includes(req.query.category.toLowerCase())
+      );
+    }
+    
+    // Search by title or author
+    if (req.query.search) {
+      const searchTerm = req.query.search.toLowerCase();
+      filteredBooks = filteredBooks.filter(book => 
+        book.title.toLowerCase().includes(searchTerm) ||
+        book.author.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    res.json(filteredBooks);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch books' });
   }
-  
-  if (status) {
-    filteredBooks = filteredBooks.filter(book => book.status === status);
-  }
-  
-  res.json(filteredBooks);
 });
 
-// GET /api/books/:id - Get book by ID
+// Get single book by ID
 router.get('/:id', (req, res) => {
-  const bookId = parseInt(req.params.id);
-  const book = books.find(b => b.id === bookId);
-  
-  if (!book) {
-    return res.status(404).json({ error: 'Book not found' });
+  try {
+    const book = books.find(b => b.id === req.params.id);
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    res.json(book);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch book' });
   }
-  
-  res.json(book);
 });
 
-// POST /api/books - Add new book
+// Add new book
 router.post('/', (req, res) => {
-  const { title, author, category, quantity, status } = req.body;
-  
-  if (!title || !author || !category || quantity === undefined) {
-    return res.status(400).json({ error: 'Missing required fields' });
+  try {
+    const { title, author, isbn, category, totalCopies, publishedYear } = req.body;
+    
+    // Basic validation
+    if (!title || !author || !isbn) {
+      return res.status(400).json({ error: 'Title, author, and ISBN are required' });
+    }
+    
+    const newBook = {
+      id: uuidv4(),
+      title,
+      author,
+      isbn,
+      category: category || 'General',
+      totalCopies: totalCopies || 1,
+      availableCopies: totalCopies || 1,
+      publishedYear: publishedYear || new Date().getFullYear(),
+      addedDate: new Date().toISOString().split('T')[0]
+    };
+    
+    books.push(newBook);
+    res.status(201).json(newBook);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to add book' });
   }
-  
-  const newBook = {
-    id: getNextId(),
-    title,
-    author,
-    category,
-    quantity: parseInt(quantity),
-    status: status || 'Available'
-  };
-  
-  books.push(newBook);
-  res.status(201).json(newBook);
 });
 
-// PUT /api/books/:id - Update book
+// Update book
 router.put('/:id', (req, res) => {
-  const bookId = parseInt(req.params.id);
-  const bookIndex = books.findIndex(b => b.id === bookId);
-  
-  if (bookIndex === -1) {
-    return res.status(404).json({ error: 'Book not found' });
+  try {
+    const bookIndex = books.findIndex(b => b.id === req.params.id);
+    if (bookIndex === -1) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    
+    const updatedBook = { ...books[bookIndex], ...req.body };
+    books[bookIndex] = updatedBook;
+    
+    res.json(updatedBook);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update book' });
   }
-  
-  const { title, author, category, quantity, status } = req.body;
-  
-  books[bookIndex] = {
-    ...books[bookIndex],
-    title: title || books[bookIndex].title,
-    author: author || books[bookIndex].author,
-    category: category || books[bookIndex].category,
-    quantity: quantity !== undefined ? parseInt(quantity) : books[bookIndex].quantity,
-    status: status || books[bookIndex].status
-  };
-  
-  res.json(books[bookIndex]);
 });
 
-// DELETE /api/books/:id - Delete book
+// Delete book
 router.delete('/:id', (req, res) => {
-  const bookId = parseInt(req.params.id);
-  const bookIndex = books.findIndex(b => b.id === bookId);
-  
-  if (bookIndex === -1) {
-    return res.status(404).json({ error: 'Book not found' });
+  try {
+    const bookIndex = books.findIndex(b => b.id === req.params.id);
+    if (bookIndex === -1) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    
+    // Check if book is currently borrowed
+    const activeBorrows = transactions.filter(t => 
+      t.bookId === req.params.id && t.status === 'borrowed'
+    );
+    
+    if (activeBorrows.length > 0) {
+      return res.status(400).json({ error: 'Cannot delete book with active borrows' });
+    }
+    
+    books.splice(bookIndex, 1);
+    res.json({ message: 'Book deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete book' });
   }
-  
-  books.splice(bookIndex, 1);
-  res.json({ message: 'Book deleted successfully' });
 });
 
-// GET /api/books/overdue - Get overdue books
-router.get('/status/overdue', (req, res) => {
-  const overdueBooks = books.filter(book => book.status === 'Overdue');
-  res.json(overdueBooks);
+// Get overdue books
+router.get('/overdue/list', (req, res) => {
+  try {
+    const overdueTransactions = transactions.filter(t => t.status === 'overdue');
+    const overdueBooks = overdueTransactions.map(transaction => {
+      const book = books.find(b => b.id === transaction.bookId);
+      return {
+        ...book,
+        transactionId: transaction.id,
+        memberId: transaction.memberId,
+        dueDate: transaction.dueDate,
+        fine: transaction.fine
+      };
+    });
+    
+    res.json(overdueBooks);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch overdue books' });
+  }
 });
 
 module.exports = router;

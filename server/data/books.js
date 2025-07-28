@@ -1,50 +1,38 @@
-// In-memory data storage for books
+// Sample books data
 let books = [
   {
-    id: 1,
-    title: "Atomic Habits",
-    author: "James Clear",
-    category: "Self-Help",
-    quantity: 5,
-    status: "Available"
+    id: '1',
+    title: 'The Great Gatsby',
+    author: 'F. Scott Fitzgerald',
+    isbn: '978-0-7432-7356-5',
+    category: 'Fiction',
+    totalCopies: 5,
+    availableCopies: 3,
+    publishedYear: 1925,
+    addedDate: '2024-01-15'
   },
   {
-    id: 2,
-    title: "The Silent Patient",
-    author: "Alex Michaelides",
-    category: "Thriller",
-    quantity: 2,
-    status: "Checked Out"
+    id: '2',
+    title: 'To Kill a Mockingbird',
+    author: 'Harper Lee',
+    isbn: '978-0-06-112008-4',
+    category: 'Fiction',
+    totalCopies: 4,
+    availableCopies: 2,
+    publishedYear: 1960,
+    addedDate: '2024-01-16'
   },
   {
-    id: 3,
-    title: "Educated",
-    author: "Tara Westover",
-    category: "Memoir",
-    quantity: 0,
-    status: "Overdue"
-  },
-  {
-    id: 4,
-    title: "The Psychology of Money",
-    author: "Morgan Housel",
-    category: "Finance",
-    quantity: 3,
-    status: "Available"
-  },
-  {
-    id: 5,
-    title: "Sapiens",
-    author: "Yuval Noah Harari",
-    category: "History",
-    quantity: 4,
-    status: "Available"
+    id: '3',
+    title: '1984',
+    author: 'George Orwell',
+    isbn: '978-0-452-28423-4',
+    category: 'Dystopian Fiction',
+    totalCopies: 6,
+    availableCopies: 4,
+    publishedYear: 1949,
+    addedDate: '2024-01-17'
   }
 ];
 
-let nextId = 6;
-
-module.exports = {
-  books,
-  getNextId: () => nextId++
-};
+module.exports = { books };
