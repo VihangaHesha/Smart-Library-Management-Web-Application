@@ -1,0 +1,50 @@
+// In-memory data storage for books
+let books = [
+  {
+    id: 1,
+    title: "Atomic Habits",
+    author: "James Clear",
+    category: "Self-Help",
+    quantity: 5,
+    status: "Available"
+  },
+  {
+    id: 2,
+    title: "The Silent Patient",
+    author: "Alex Michaelides",
+    category: "Thriller",
+    quantity: 2,
+    status: "Checked Out"
+  },
+  {
+    id: 3,
+    title: "Educated",
+    author: "Tara Westover",
+    category: "Memoir",
+    quantity: 0,
+    status: "Overdue"
+  },
+  {
+    id: 4,
+    title: "The Psychology of Money",
+    author: "Morgan Housel",
+    category: "Finance",
+    quantity: 3,
+    status: "Available"
+  },
+  {
+    id: 5,
+    title: "Sapiens",
+    author: "Yuval Noah Harari",
+    category: "History",
+    quantity: 4,
+    status: "Available"
+  }
+];
+
+let nextId = 6;
+
+module.exports = {
+  books,
+  getNextId: () => nextId++
+};
