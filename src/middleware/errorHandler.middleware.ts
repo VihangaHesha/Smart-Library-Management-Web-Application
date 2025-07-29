@@ -7,7 +7,7 @@ export interface CustomError extends Error {
   errors?: any;
 }
 
-export const errorHandler = (err: CustomError, req: Request, res: Response, next: NextFunction) => {
+export const errorHandlerMiddleware = (err: CustomError, req: Request, res: Response, next: NextFunction) => {
   let error = { ...err };
   error.message = err.message;
 

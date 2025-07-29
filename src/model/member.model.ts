@@ -1,6 +1,6 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, {Document, Schema, Types} from 'mongoose';
 
-export interface IMember extends Document {
+export interface IMember extends Document<Types.ObjectId> {
   memberId: string;
   name: string;
   email: string;

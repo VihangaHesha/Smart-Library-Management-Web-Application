@@ -19,5 +19,6 @@ export interface AuthResponseDTO {
     email: string;
     role: string;
   };
-  token?: string;
+  accessToken?: string;
+  refreshToken?: string;
 }

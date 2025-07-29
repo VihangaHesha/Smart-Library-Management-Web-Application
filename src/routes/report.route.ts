@@ -5,8 +5,8 @@ import {
   getMemberActivity,
   getOverdueReport,
   getMonthlyTrends
-} from '../controllers/reportController';
-import { authenticate, authorize } from '../middleware/auth';
+} from '../controllers/report.controller';
+import { authenticate, authorize } from '../middleware/auth.middleware';
 
 const router = Router();
 

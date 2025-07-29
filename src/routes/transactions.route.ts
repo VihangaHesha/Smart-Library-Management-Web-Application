@@ -6,9 +6,9 @@ import {
   returnBook,
   updateTransaction,
   deleteTransaction
-} from '../controllers/transactionController';
-import { authenticate, authorize } from '../middleware/auth';
-import { validateCreateTransaction, validateObjectId, validatePagination } from '../middleware/validation';
+} from '../controllers/transaction.controller';
+import { authenticate, authorize } from '../middleware/auth.middleware';
+import { validateCreateTransaction, validateObjectId, validatePagination } from '../middleware/validation.middleware';
 
 const router = Router();
 

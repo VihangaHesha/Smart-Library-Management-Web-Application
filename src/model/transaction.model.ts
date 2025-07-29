@@ -1,6 +1,6 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, {Document, Schema, Types} from 'mongoose';
 
-export interface ITransaction extends Document {
+export interface ITransaction extends Document<Types.ObjectId> {
   transactionId: string;
   bookId: mongoose.Types.ObjectId;
   memberId: mongoose.Types.ObjectId;

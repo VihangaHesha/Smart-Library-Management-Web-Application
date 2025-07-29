@@ -7,9 +7,9 @@ import {
   deleteBook,
   getOverdueBooks,
   getBooksByCategory
-} from '../controllers/bookController';
-import { authenticate, authorize } from '../middleware/auth';
-import { validateCreateBook, validateObjectId, validatePagination } from '../middleware/validation';
+} from '../controllers/book.controller';
+import { authenticate, authorize } from '../middleware/auth.middleware';
+import { validateCreateBook, validateObjectId, validatePagination } from '../middleware/validation.middleware';
 
 const router = Router();
 

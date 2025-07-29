@@ -6,9 +6,9 @@ import {
   createMember,
   updateMember,
   deleteMember
-} from '../controllers/memberController';
-import { authenticate, authorize } from '../middleware/auth';
-import { validateCreateMember, validateObjectId, validatePagination } from '../middleware/validation';
+} from '../controllers/member.controller';
+import { authenticate, authorize } from '../middleware/auth.middleware';
+import { validateCreateMember, validateObjectId, validatePagination } from '../middleware/validation.middleware';
 
 const router = Router();
 
