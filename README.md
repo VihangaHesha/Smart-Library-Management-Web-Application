@@ -24,10 +24,10 @@ Welcome to **BookNest**, your next-generation solution for seamless library mana
 
 See BookNest in action:
 
-![image1](image1)
+![image1](public/images/Screenshot 2025-07-29 210351.png)
 *Library Dashboard with statistics and quick actions*
 
-![image2](image2)
+![image2](public/images/Screenshot 2025-07-29 210417.png)
 *Member management with search and status*
 
 ![image3](image3)
@@ -44,7 +44,7 @@ See BookNest in action:
 - **State Management:** Redux Toolkit
 - **Styling:** Tailwind CSS
 - **API Integration:** Axios (JWT-ready)
-- **PDF Generation:** [jsPDF](https://github.com/parallax/jsPDF), [html2pdf.js](https://github.com/eKoopmans/html2pdf.js) or similar
+- **PDF Generation:** [jsPDF](https://github.com/parallax/jsPDF)
 - **Email Integration:** SendGrid (for transactional emails)
 - **Linting:** ESLint with React and TypeScript plugins
 
