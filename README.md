@@ -30,17 +30,14 @@ See BookNest in action:
 ![Member Management](public/images/Screenshot%202025-07-29%20210417.png)
 *Member management with search and status*
 
-![Reports](public/images/Screenshot%202025-07-29%20210434.png)
+![Reports](public/images/Screenshot%202025-07-29%20210442.png)
 *Comprehensive reports with PDF downloading capabilities*
 
-![Transactions](public/images/Screenshot%202025-07-29%20210445.png)
+![Transactions](public/images/Screenshot%202025-07-29%20210522.png)
 *Transactions management with member and book details*
 
-![Login](public/images/Screenshot%202025-07-29%20210625.png)
+![Login](public/images/Screenshot%202025-07-29%20212240.png)
 *Login page*
-
-![Signup](public/images/Screenshot%202025-07-29%20210649.png)
-*Signup page*
 
 ---
 
