@@ -1,6 +1,6 @@
 # 📚 BookNest: Smart Library Management Web Application
 
-Welcome to **BookNest**, your next-generation solution for seamless library management! Designed for modern libraries, BookNest leverages React, TypeScript, Redux Toolkit, and Vite to deliver a blazing-fast, intuitive, and feature-rich experience for both librarians and members.
+Welcome to **BookNest**, your next-generation solution for seamless library management! Designed for modern libraries, BookNest leverages React, TypeScript, Redux Toolkit, and Vite to deliver a blazing-fast, feature-rich experience for users and admins alike.
 
 ---
 
@@ -24,17 +24,23 @@ Welcome to **BookNest**, your next-generation solution for seamless library mana
 
 See BookNest in action:
 
-![image1](public/images/Screenshot 2025-07-29 210351.png)
+![Dashboard](public/images/Screenshot%202025-07-29%20210351.png)
 *Library Dashboard with statistics and quick actions*
 
-![image2](public/images/Screenshot 2025-07-29 210417.png)
+![Member Management](public/images/Screenshot%202025-07-29%20210417.png)
 *Member management with search and status*
 
-![image3](image3)
+![Reports](public/images/Screenshot%202025-07-29%20210434.png)
 *Comprehensive reports with PDF downloading capabilities*
 
-![image4](image4)
+![Transactions](public/images/Screenshot%202025-07-29%20210445.png)
 *Transactions management with member and book details*
+
+![Login](public/images/Screenshot%202025-07-29%20210625.png)
+*Login page*
+
+![Signup](public/images/Screenshot%202025-07-29%20210649.png)
+*Signup page*
 
 ---
 
@@ -100,6 +106,8 @@ src/
   ├─ reports/        # PDF generation utilities and components
   ├─ assets/         # App logos and images
   └─ main.tsx        # App entry point
+public/
+  └─ images/         # App screenshots and previews
 ```
 
 ---
