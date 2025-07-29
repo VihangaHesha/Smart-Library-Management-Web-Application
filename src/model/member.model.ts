@@ -76,17 +76,13 @@ const memberSchema = new Schema<IMember>({
 });
 
 // Generate member ID before saving
-memberSchema.pre('save', async function(next) {
+/*memberSchema.pre('save', async function(next) {
   if (!this.memberId) {
     const count = await mongoose.model('Member').countDocuments();
     this.memberId = `M-${String(count + 10001).padStart(5, '0')}`;
   }
   next();
-});
+});*/
 
-// Indexes
-memberSchema.index({ memberId: 1 });
-memberSchema.index({ email: 1 });
-memberSchema.index({ status: 1 });
 
 export default mongoose.model<IMember>('Member', memberSchema);

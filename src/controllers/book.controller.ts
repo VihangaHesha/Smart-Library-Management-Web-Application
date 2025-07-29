@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
+import { validationResult } from "express-validator";
 import * as BookService from "../services/book.service";
 
 

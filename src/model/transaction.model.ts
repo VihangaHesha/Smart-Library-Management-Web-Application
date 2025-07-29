@@ -69,19 +69,14 @@ const transactionSchema = new Schema<ITransaction>({
 });
 
 // Generate transaction ID before saving
-transactionSchema.pre('save', async function(next) {
+/*transactionSchema.pre('save', async function(next) {
   if (!this.transactionId) {
     const count = await mongoose.model('Transaction').countDocuments();
     this.transactionId = `TXN-${String(count + 10001).padStart(5, '0')}`;
   }
   next();
-});
+});*/
 
-// Indexes
-transactionSchema.index({ transactionId: 1 });
-transactionSchema.index({ bookId: 1 });
-transactionSchema.index({ memberId: 1 });
-transactionSchema.index({ status: 1 });
-transactionSchema.index({ dueDate: 1 });
+
 
 export default mongoose.model<ITransaction>('Transaction', transactionSchema);

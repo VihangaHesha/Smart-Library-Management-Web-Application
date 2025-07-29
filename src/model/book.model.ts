@@ -85,10 +85,4 @@ const bookSchema = new Schema<IBook>({
   timestamps: true
 });
 
-// Indexes for better query performance
-bookSchema.index({ title: 'text', author: 'text', category: 'text' });
-bookSchema.index({ category: 1 });
-bookSchema.index({ author: 1 });
-bookSchema.index({ isbn: 1 });
-
 export default mongoose.model<IBook>('Book', bookSchema);
